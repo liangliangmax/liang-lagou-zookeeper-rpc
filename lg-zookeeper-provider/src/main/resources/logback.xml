@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 修改一下路径-->
+    <!--生成在docker中的路径，docker启动需要映射-->
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <springProperty scope="context" name="port" source="server.port"/>
+    <property name="PATH" value="/Users/liang/Desktop/repare/sales.log"></property>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%class] [%-5level] --%mdc{client}%msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+    <springProfile name="!dev">
+        <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH}/info.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <FileNamePattern>${PATH}/info.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+                <MaxFileSize>500MB</MaxFileSize>
+                <totalSizeCap>2GB</totalSizeCap>
+                <!--<MaxHistory>14</MaxHistory>-->
+            </rollingPolicy>
+            <layout>
+                <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%class] [%-5level] [%logger:%line]--%mdc{client} %msg%n</pattern>
+            </layout>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>INFO</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        </appender>
+
+        <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH}/debug.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <FileNamePattern>${PATH}/debug.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+                <MaxFileSize>500MB</MaxFileSize>
+                <totalSizeCap>2GB</totalSizeCap>
+                <!--<MaxHistory>14</MaxHistory>-->
+            </rollingPolicy>
+            <layout>
+                <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%class] [%-5level] [%logger:%line]--%mdc{client} %msg%n</pattern>
+            </layout>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>DEBUG</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        </appender>
+
+        <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH}/warn.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <FileNamePattern>${PATH}/warn.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+                <MaxFileSize>500MB</MaxFileSize>
+                <totalSizeCap>2GB</totalSizeCap>
+                <!--<MaxHistory>14</MaxHistory>-->
+            </rollingPolicy>
+            <layout>
+                <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%class] [%-5level] [%logger:%line]--%mdc{client} %msg%n</pattern>
+            </layout>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>WARN</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        </appender>
+
+        <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH}/error.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <FileNamePattern>${PATH}/error.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+                <MaxFileSize>500MB</MaxFileSize>
+                <totalSizeCap>2GB</totalSizeCap>
+                <!--<MaxHistory>14</MaxHistory>-->
+            </rollingPolicy>
+            <layout>
+                <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%class] [%-5level] [%logger:%line]--%mdc{client} %msg%n</pattern>
+            </layout>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>ERROR</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="INFO_FILE" />
+            <appender-ref ref="DEBUG_FILE" />
+            <appender-ref ref="WARN_FILE" />
+            <appender-ref ref="ERROR_FILE" />
+        </root>
+    </springProfile>
+</configuration>

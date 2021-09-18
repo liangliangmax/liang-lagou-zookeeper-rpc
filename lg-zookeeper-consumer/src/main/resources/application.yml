@@ -1,0 +1,6 @@
+server:
+    port: 8080
+
+zookeeper:
+    host: 172.16.62.216
+    port: 2181
